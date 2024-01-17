@@ -10,13 +10,13 @@ while ($ex):
     echo("\n\rШвартовщик: Эй, а ну постой. \n\r");
     echo("Швартовщик: Пришвартоваться у причала стоит шилинг\n\r");
     echo('Швартовщик: И назови своё имя ');
-    $MyName = fgets(STDIN);
+    $MyName = trim(fgets(STDIN));
 
-    if ($MyName === "exit\r\n") {
+    if ($MyName === "exit") {
         $ex = false;
     }
 
-    if ($MyName === "\r\n"):
+    if ($MyName === ""):
         echo("Вы: Может лучше три шилинга, а имя ... чёрт с ним?\n\r");
         echo("Швартовщик: С прибытием в порт Ройал мистер Смит!\n\r");
         $balanceOfPort = $balanceOfPort + 3;
