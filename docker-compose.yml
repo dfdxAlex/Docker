@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  ser-php:
+    build: \project_for_php\PayWithCash
+  ser-python:
+    build: \project_for_Python\payWithCash
+
+  

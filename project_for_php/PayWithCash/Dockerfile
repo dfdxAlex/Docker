@@ -4,4 +4,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD ["php", "main.php"]
+CMD ["php", "service_php.php"]
