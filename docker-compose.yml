@@ -1,9 +1,10 @@
 version: '3'
 
 services:
-  ser-php:
-    build: \project_for_php\PayWithCash
-  ser-python:
-    build: \project_for_Python\payWithCash
+  php-server:
+    build: /project_for_php/api_ok
+    ports:
+      - "83:83"
+
 
   
