@@ -1,7 +1,5 @@
 <?php
 
-echo "Current working directory: " . getcwd();
-
 $returnString = "PHP -> Output OK";
 $returnJson = json_encode($returnString);
 

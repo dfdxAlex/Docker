@@ -1,6 +1,6 @@
 import requests
 
-url = "http://localhost:83?ok"  # Замените на реальный URL вашего API
+url = "http://php-server:83?ok"  # Замените на реальный URL вашего API
 
 response = requests.get(url)
 

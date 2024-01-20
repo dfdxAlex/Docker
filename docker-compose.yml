@@ -3,8 +3,12 @@ version: '3'
 services:
   php-server:
     build: /project_for_php/api_ok
-    ports:
-      - "83:83"
+
+  client:
+    build: /project_for_Python/api_client
+    command: python ApiOk.py
+    depends_on:
+          - php-server
 
 
   
