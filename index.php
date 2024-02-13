@@ -26,6 +26,7 @@ $query_create_tables = "
         rating INTEGER CHECK (rating BETWEEN 1 AND 10),
         content TEXT
     );
+
 ";
 
 $result = pg_query($dbconn, $query_create_tables); // Явное указание соединения
@@ -34,20 +35,17 @@ if (!$result) {
     exit;
 }
 
-// Заполнение таблиц данными (предполагается, что данные уже есть)
 
 // Запрос 1: имена и фамилии авторов, а также количество написанных ими книг
 $query_authors_books_count = "
-    SELECT 
-        authors.first_name,
-        authors.last_name,
-        COUNT(books.book_id) AS book_count
-    FROM 
-        authors
-    JOIN 
-        books ON authors.author_id = books.author_id
-    GROUP BY 
-        authors.author_id, authors.first_name, authors.last_name;
+select 
+    authors.first_name,
+	authors.last_name,
+	count(books.author_id)
+from authors
+left join books
+on authors.author_id = books.author_id
+group by authors.first_name, authors.last_name
 ";
 
 $result = pg_query($dbconn, $query_authors_books_count); // Явное указание соединения
@@ -75,23 +73,16 @@ $top_authors_exists = $row_check_view['exists'] === 't';
 // Запрос 2: представление с пятью авторами, у которых средняя оценка всех книг самая высокая (если не существует)
 if (!$top_authors_exists) {
     $query_create_view = "
-        CREATE VIEW top_authors AS
-        SELECT 
-            authors.author_id,
-            authors.first_name,
-            authors.last_name,
-            AVG(reviews.rating) AS avg_rating
-        FROM 
-            authors
-        JOIN 
-            books ON authors.author_id = books.author_id
-        JOIN 
-            reviews ON books.book_id = reviews.book_id
-        GROUP BY 
-            authors.author_id, authors.first_name, authors.last_name
-        ORDER BY 
-            avg_rating DESC
-        LIMIT 5;
+    create view authors_rating as
+    select authors.author_id, authors.first_name, authors.last_name, avg(reviews.rating) as rating
+    from authors
+    join books
+    on authors.author_id = books.author_id
+    join reviews
+    on books.book_id = reviews.book_id
+    group by authors.author_id, authors.first_name, authors.last_name
+    order by rating desc
+    limit 5
     ";
 
     $result = pg_query($dbconn, $query_create_view); // Явное указание соединения

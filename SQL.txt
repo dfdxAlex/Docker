@@ -1,0 +1,51 @@
+    SQL - 1
+    
+    CREATE TABLE IF NOT EXISTS authors (
+        author_id SERIAL PRIMARY KEY,
+        first_name VARCHAR(50) NOT NULL,
+        last_name VARCHAR(50) NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS books (
+        book_id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        publication_year INTEGER NOT NULL,
+        isbn VARCHAR(20) UNIQUE NOT NULL,
+        author_id INTEGER REFERENCES authors(author_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS reviews (
+        review_id SERIAL PRIMARY KEY,
+        book_id INTEGER REFERENCES books(book_id),
+        rating INTEGER CHECK (rating BETWEEN 1 AND 10),
+        content TEXT
+    );
+
+
+
+SQL - 2
+
+SELECT 
+    authors.first_name,
+	authors.last_name,
+	count(books.author_id)
+FROM authors
+LEFT JOIN books
+ON authors.author_id = books.author_id
+GROUP BY authors.first_name, authors.last_name
+";
+
+
+SQL - 3
+
+CREATE VIEW authors_rating AS
+SELECT authors.author_id, authors.first_name, authors.last_name, AVG(reviews.rating) AS rating
+FROM authors
+JOIN books
+ON authors.author_id = books.author_id
+JOIN reviews
+ON books.book_id = reviews.book_id
+GROUP BY authors.author_id, authors.first_name, authors.last_name
+ORDER BY rating DESC
+LIMIT 5
+";
